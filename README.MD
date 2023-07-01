@@ -75,11 +75,3 @@ Testing
 		$	sudo docker ps
 		$	sudo docker stop <container id/name>
 		$	sudo docker restart <container id/name>
-		
-		
-Final Notes
-
-	/extra_files/
-		- Contains two different versions of the same files (exclusively for React.js client).
-		- Minor changes to support the different use cases between running on Windows LocalHost and Linux Compute Instance.
-		- Less important, not necessary for deployment.
