@@ -11,7 +11,7 @@ export default function UserInputElements(){
     const [inputValue, updateInputValue] = useState(null);
     const userInput = useRef(null);
     
-    const apiUrl = "http://138.2.74.181:8000/api/fibonacci/post";
+    const apiUrl = "http://localhost:8000/api/fibonacci/post";
 
     useEffect(() => {
         if (valid) {

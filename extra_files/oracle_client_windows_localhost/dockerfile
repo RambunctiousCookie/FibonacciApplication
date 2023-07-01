@@ -17,14 +17,11 @@ RUN npm install bootstrap@v5.2.3
 # Copy app files
 COPY . .
 
-# Set permissions for react-scripts
-RUN chmod +x /app/node_modules/.bin/react-scripts
-
 # Build the app
 RUN npm run build
 
 # Set environment variables
-ENV REACT_APP_API_URL=http://138.2.74.181:8000
+ENV REACT_APP_API_URL=https://api.example.com
 
 # Expose the port
 EXPOSE 3000
