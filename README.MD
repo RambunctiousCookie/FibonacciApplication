@@ -2,17 +2,17 @@
 **The Spring-Boot server is annotated with CrossOrigin(), thus eliminating CORS restrictions. Therefore only one compute instance is required to host both applications.**
 
 //Prerequisites:
-	1. Docker
-		/*example installation script for fedora distro*/
+
+	1. Docker /*example installation script for fedora distro*/
 		$	sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 		$	sudo yum install docker-ce docker-ce-cli containerd.io
 		$	sudo systemctl start docker
 	2. Maven
 	3. Node.js
-	4. Very Secure FTP Daemon
-		/*used for moving files to compute instance; can be substituted for other methods of achieving the same result*/
+	4. Very Secure FTP Daemon /*used for moving files to compute instance; can be substituted for other methods of achieving the same result*/
 		$	sudo yum install vsftpd -y
 		$	sudo systemctl restart vsftpd
+	5. Ensure that proper Ingress rules have been setup for public access to ports 8000 and 3000 of the compute instance.
 
 REST API Server (Spring-Boot)
 
