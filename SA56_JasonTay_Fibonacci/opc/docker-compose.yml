@@ -1,0 +1,17 @@
+version: '3'
+services:
+  oracle_client:
+    build:
+      context: ./OracleClient
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_API_URL=http://138.2.74.181:8000
+
+  oracle_server:
+    build:
+      context: ./OracleAPI
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000

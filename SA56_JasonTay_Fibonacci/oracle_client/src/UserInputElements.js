@@ -11,7 +11,13 @@ export default function UserInputElements(){
     const [inputValue, updateInputValue] = useState(null);
     const userInput = useRef(null);
     
-    const apiUrl = "http://138.2.74.181:8000/api/fibonacci/post";
+	// Access the environment variable
+	const baseUrl = process.env.REACT_APP_API_URL;
+
+	// Append the URI
+	const apiUrl = `${baseUrl}/api/fibonacci/post`;
+	
+    //const apiUrl = "http://138.2.74.181:8000/api/fibonacci/post";
 
     useEffect(() => {
         if (valid) {
