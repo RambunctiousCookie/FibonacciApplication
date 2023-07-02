@@ -1,9 +1,9 @@
 package com.example.oracle.service;
 
+import com.example.oracle.dto.FibonacciResponseStringDTO;
 import com.example.oracle.dto.FibonacciResponseDTO;
 import lombok.Data;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
@@ -16,30 +16,39 @@ public class FibonacciService {
     private final int last;
     private final BigInteger[] fibonacciMemo;
     private final BigInteger[][] fibonacciSortedMemo;
+    private final HashMap<BigInteger,String> mapper;
 
     public FibonacciService() {
         last = 100;     //takes in a numerical value between 1 to 100
 
+        this.mapper = new HashMap<>();   //instantiate the HashMap first to return String JSON- otherwise, JSON will round up fibonacci elements 80-100;
+
         //immediately cache all values in service fields upon instantiation for speedy retrieval
         //      if it is not cached, the computational effort will be directly proportional to the number of api calls made
 
-        fibonacciMemo = new BigInteger[last];
-        initializeFibonacciMemo(last -1);    //use idx value
+        this.fibonacciMemo = new BigInteger[last];
+        initializeFibonacciMemo(last -1);    //use idx value- This step also populates the Mapper HashMap for retrieving corresponding String values in O(1)
 
-        fibonacciSortedMemo = new BigInteger[last][];
+        this.fibonacciSortedMemo = new BigInteger[last][];
         for (int i = 0; i< last; i++){
             fibonacciSortedMemo[i] = new BigInteger[i+1];       //use idx value and +1 for length
         }
         initializeFibonacciSortedMemo();
+
     }
 
     private void initializeFibonacciMemo(int n){    //initialize
         //seed values
         fibonacciMemo[0] = BigInteger.valueOf(0);
+        mapper.put(fibonacciMemo[0],fibonacciMemo[0].toString());   //populate the hashmap for JSON string retrieval
         fibonacciMemo[1] = BigInteger.valueOf(1);
+        mapper.put(fibonacciMemo[1],fibonacciMemo[1].toString());  //populate the hashmap for JSON string retrieval
 
-        for (int i=2;i< fibonacciMemo.length;i++)
-            fibonacciMemo[i] = fibonacciMemo[i-2].add(fibonacciMemo[i-1]);
+        for (int i=2;i< fibonacciMemo.length;i++){
+            fibonacciMemo[i] = fibonacciMemo[i-2].add(fibonacciMemo[i-1]);  //pre-calc and pre-cache the values
+            mapper.put(fibonacciMemo[i],fibonacciMemo[i].toString());   //populate the hashmap for JSON string retrieval (prevent rounding up)
+        }
+
     }
 
     private void initializeFibonacciSortedMemo(){
@@ -59,13 +68,24 @@ public class FibonacciService {
     }
 
     public Mono<FibonacciResponseDTO> getFibonacciResult(int elements){
-//        return Flux.just(new FibonacciResponseDTO(
-//                Arrays.copyOf(fibonacciMemo, elements),
-//                fibonacciSortedMemo[elements-1]));
-
         return Mono.just(new FibonacciResponseDTO(
                 Arrays.copyOf(fibonacciMemo, elements),
                 fibonacciSortedMemo[elements-1]));
+    }
+
+    public Mono<FibonacciResponseStringDTO> getFibonacciResultString(int elements){
+
+//        BigInteger[] arrFibonacciBigInt = ;
+//        BigInteger[] arrSortedBigInt = ;
+
+        //Use String[]- otherwise, JSON will round up fibonacci elements 80-100 for each list;
+
+        String[] arrFibonacciString = Arrays.stream(Arrays.copyOf(fibonacciMemo, elements)).map(x->mapper.get(x)).toArray(String[]::new);
+        String[] arrSortedString = Arrays.stream(fibonacciSortedMemo[elements-1]).map(x->mapper.get(x)).toArray(String[]::new);
+
+        return Mono.just(new FibonacciResponseStringDTO(
+                arrFibonacciString,
+                arrSortedString));
     }
 
 

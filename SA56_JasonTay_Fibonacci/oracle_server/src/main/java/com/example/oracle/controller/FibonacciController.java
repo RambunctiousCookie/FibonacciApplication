@@ -1,15 +1,12 @@
 package com.example.oracle.controller;
 
+import com.example.oracle.dto.FibonacciResponseStringDTO;
 import com.example.oracle.dto.UserInputDTO;
 import com.example.oracle.dto.FibonacciResponseDTO;
 import com.example.oracle.service.FibonacciService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -36,6 +33,7 @@ public class FibonacciController {
     @CrossOrigin
     @GetMapping("/fibonacci")
     public Mono<FibonacciResponseDTO> publishFibonacciResultJson (@Valid @RequestBody UserInputDTO request) {
+        //return a DTO object with two BigInteger[] arrays to satisfy the assignment requirements (JSON output)
         return fibonacciService.getFibonacciResult(request.getElements());
     }
 
@@ -43,8 +41,9 @@ public class FibonacciController {
     //Example url: http://localhost:8000/api/fibonacci/post
     @CrossOrigin
     @PostMapping("/fibonacci/post")
-    public Mono<FibonacciResponseDTO> publishFibonacciResultPost (@Valid @RequestBody UserInputDTO request) {
-        return fibonacciService.getFibonacciResult(request.getElements());
+    public Mono<FibonacciResponseStringDTO> publishFibonacciResultPost (@Valid @RequestBody UserInputDTO request) {
+        //return a DTO object with two String[] arrays to prevent rounding issues when posting to screen
+        return fibonacciService.getFibonacciResultString(request.getElements());
     }
 
 }
