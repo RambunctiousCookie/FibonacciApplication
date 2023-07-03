@@ -1,6 +1,6 @@
 **INSTRUCTIONS ON HOW TO BUILD AND RUN THE CONTAINER**
 
-**BOTH DOCKERFILES CAN BE FOUND IN /opc**
+**BOTH OF THE RESPECTIVE `Dockerfile`s, AS WELL AS `docker-compose.yml` CAN BE FOUND IN /opc**
 
 These instructions assume that:
 

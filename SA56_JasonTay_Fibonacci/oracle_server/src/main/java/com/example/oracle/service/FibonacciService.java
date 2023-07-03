@@ -54,7 +54,11 @@ public class FibonacciService {
     private void initializeFibonacciSortedMemo(){
         for (int i =0; i<100; i++){
             BigInteger[] temp = Arrays.copyOf(fibonacciMemo, fibonacciSortedMemo[i].length);
-            mergeSort(temp);
+
+            //TODO: replace with stackSort();
+            stackSort(temp);
+            //mergeSort(temp);    //old- n*log n; remove this, replace with stack implementation
+
             for (int j=0; j<temp.length; j++){
                 fibonacciSortedMemo[i][j] = temp[j];
             }
@@ -86,6 +90,27 @@ public class FibonacciService {
         return Mono.just(new FibonacciResponseStringDTO(
                 arrFibonacciString,
                 arrSortedString));
+    }
+
+    public static void stackSort(BigInteger[] array){
+        List<BigInteger> sortedList = new ArrayList<>();
+        Stack<BigInteger> stack = new Stack<>();
+
+        for (BigInteger element : array){
+            if (element.mod(BigInteger.TWO).equals(BigInteger.ZERO))
+                stack.push(element);
+        }
+        for (BigInteger element : array){
+            // could .remove() the even elements in previous step
+            // then .addAll() remaining if it was a list- disadvantage of Array[]
+            if (!element.mod(BigInteger.TWO).equals(BigInteger.ZERO))
+                stack.push(element);
+        }
+        while (!stack.isEmpty()) {
+            sortedList.add(stack.pop());
+        }
+        array= sortedList.toArray(new BigInteger[0]);
+        //end result is still constant time
     }
 
 
